@@ -38,6 +38,53 @@ router.get('/',async (req, res) =>{
   }
 })
 
+//  Update Method for MenuItem
+
+router.put('/:id',async (req, res) => {
+  try{
+    const MenuItemId = req.params.id;
+    const updatedMenuItemData = req.body;
+
+    const response = await MenuItem.findByIdAndUpdate(MenuItemId,updatedMenuItemData, {
+      new: true,
+      runValidators: true,
+    })
+
+    if (!response) {
+      return res.status(404).json({error: 'MenuItem not found'});
+    }
+    console.log('data updated');
+    res.status(200).json(response);
+    
+  }catch(err){
+    console.log(err);
+    res.status(500).json({error: 'Internal Server Error'});
+
+  }
+})
+
+
+
+// Delete method for MenuItem
+
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const MenuItemId = req.params.id;
+
+    const response = await MenuItem.findByIdAndDelete(MenuItemId);
+    if (!response) {
+      return res.status(404).json({ error: 'MenuItem not found' });
+    }
+
+    console.log('MenuItem deleted');
+    res.status(200).json({ message: 'MenuItem deleted successfully' });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 // MenuItem taste worktype
 router.get('/:tasteType', async (req, res) => {
